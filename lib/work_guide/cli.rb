@@ -6,5 +6,12 @@ module WorkGuide
     def add(description)
       Guide.create(description: description)
     end
+
+    desc "list", "List guides"
+    def list
+      Guide.all.each do |guide|
+        puts guide.description
+      end
+    end
   end
 end
