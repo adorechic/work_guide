@@ -9,8 +9,8 @@ module WorkGuide
 
     desc "list", "List guides"
     def list
-      Guide.all.each do |guide|
-        puts guide.description
+      Guide.all.each_with_index do |guide, index|
+        puts "[#{index}] #{guide.description}"
       end
     end
   end
