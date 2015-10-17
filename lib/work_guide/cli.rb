@@ -6,10 +6,11 @@ module WorkGuide
     desc "add [guide description]", "Add a new guide"
     option :cycle, default: 'daily', banner: '[hourly|daily|weekly|monthly]', aliases: :c
     def add(description)
-      Guide.create(
+      guide = Guide.create(
         description: description,
         cycle: options[:cycle]
       )
+      puts "Created [#{Guide.all.size - 1}]#{guide}"
     end
 
     desc "list", "List guides"

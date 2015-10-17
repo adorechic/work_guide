@@ -7,8 +7,10 @@ module WorkGuide
 
     class << self
       def create(args)
-        all << new(args)
+        guide = new(args)
+        all << guide
         save
+        guide
       end
 
       def all
