@@ -1,4 +1,5 @@
 require 'thor'
+require 'text-table'
 
 module WorkGuide
   class CLI < Thor
@@ -13,9 +14,12 @@ module WorkGuide
 
     desc "list", "List guides"
     def list
-      Guide.all.each_with_index do |guide, index|
-        puts "[#{index}]#{guide}"
+      table = Text::Table.new
+      table.head = %w(index cycle description)
+      table.rows = Guide.all.map.with_index do |guide, index|
+        [index, guide.cycle, guide.description]
       end
+      puts table.to_s
     end
 
     desc "delete [index]", "Delete a guide"
