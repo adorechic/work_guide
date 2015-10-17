@@ -10,7 +10,7 @@ module WorkGuide
     desc "list", "List guides"
     def list
       Guide.all.each_with_index do |guide, index|
-        puts "[#{index}][#{guide.cycle}] #{guide.description}"
+        puts "[#{index}]#{guide}"
       end
     end
 
@@ -18,7 +18,7 @@ module WorkGuide
     def delete(index)
       guide = Guide.all.delete_at(index.to_i)
       Guide.save
-      puts "Deleted [#{index}][#{guide.cycle}] #{guide.description}"
+      puts "Deleted [#{index}]#{guide}"
     end
   end
 end

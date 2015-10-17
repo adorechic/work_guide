@@ -37,5 +37,9 @@ module WorkGuide
         cycle: cycle,
       }
     end
+
+    def to_s
+      "[#{cycle}] #{description}"
+    end
   end
 end
