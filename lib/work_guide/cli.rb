@@ -3,8 +3,12 @@ require 'thor'
 module WorkGuide
   class CLI < Thor
     desc "add [guide description]", "Add a new guide"
+    option :cycle, default: 'daily', banner: '[hourly|daily|weekly|monthly]', aliases: :c
     def add(description)
-      Guide.create(description: description)
+      Guide.create(
+        description: description,
+        cycle: options[:cycle]
+      )
     end
 
     desc "list", "List guides"
