@@ -13,5 +13,12 @@ module WorkGuide
         puts "[#{index}] #{guide.description}"
       end
     end
+
+    desc "delete [index]", "Delete a guide"
+    def delete(index)
+      guide = Guide.all.delete_at(index.to_i)
+      Guide.save
+      puts "Deleted [#{index}] #{guide.description}"
+    end
   end
 end
