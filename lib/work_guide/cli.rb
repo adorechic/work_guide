@@ -16,9 +16,9 @@ module WorkGuide
     desc "list", "List guides"
     def list
       table = Text::Table.new
-      table.head = %w(index cycle description)
+      table.head = %w(index cycle description done_at)
       table.rows = Guide.all.map.with_index do |guide, index|
-        [index, guide.cycle, guide.description]
+        [index, guide.cycle, guide.description, guide.done_at]
       end
       puts table.to_s
     end

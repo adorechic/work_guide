@@ -3,7 +3,7 @@ require 'active_support/core_ext'
 
 module WorkGuide
   class Guide
-    attr_accessor :description, :cycle
+    attr_accessor :description, :cycle, :done_at
 
     class << self
       def create(args)
@@ -28,20 +28,22 @@ module WorkGuide
       end
     end
 
-    def initialize(description: , cycle: 'daily')
+    def initialize(description: , cycle: 'daily', done_at: nil)
       @description = description
       @cycle = cycle
+      @done_at = done_at
     end
 
     def to_h
       {
         description: description,
         cycle: cycle,
+        done_at: done_at,
       }
     end
 
     def to_s
-      "[#{cycle}] #{description}"
+      "[#{cycle}] #{description} (#{done_at || '--'})"
     end
   end
 end
