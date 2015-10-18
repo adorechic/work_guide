@@ -29,5 +29,13 @@ module WorkGuide
       Guide.save
       puts "Deleted [#{index}]#{guide}"
     end
+
+    desc "done [index]", "Mark as done"
+    def done(index)
+      guide = Guide.all[index.to_i]
+      guide.done_at = Time.now
+      Guide.save
+      puts "Done [#{index}]#{guide}"
+    end
   end
 end
