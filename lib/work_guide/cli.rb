@@ -17,9 +17,11 @@ module WorkGuide
     def list
       table = Text::Table.new
       table.head = %w(index cycle description done_at)
-      table.rows = Guide.all.map.with_index do |guide, index|
-        [index, guide.cycle, guide.description, guide.done_at]
-      end
+      table.rows = Guide.all.map.with_index { |guide, index|
+        if guide.should_do?
+          [index, guide.cycle, guide.description, guide.done_at]
+        end
+      }.compact
       puts table.to_s
     end
 

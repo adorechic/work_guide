@@ -36,6 +36,25 @@ module WorkGuide
       end
     end
 
+    def should_do?
+      if done_at
+        case cycle
+        when 'hourly'
+          1.hour.since(done_at).beginning_of_hour.past?
+        when 'daily'
+          1.day.since(done_at).beginning_of_day.past?
+        when 'weekly'
+          1.week.since(done_at).beginning_of_day.past?
+        when 'monthly'
+          1.month.since(done_at).beginning_of_month.past?
+        else
+          raise ArgumentError, "Unknown cycle: #{cycle}"
+        end
+      else
+        true
+      end
+    end
+
     def to_h
       {
         description: description,
