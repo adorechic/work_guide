@@ -31,7 +31,9 @@ module WorkGuide
     def initialize(description: , cycle: 'daily', done_at: nil)
       @description = description
       @cycle = cycle
-      @done_at = done_at
+      if done_at
+        @done_at = Time.parse(done_at)
+      end
     end
 
     def to_h
