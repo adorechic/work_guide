@@ -14,11 +14,12 @@ module WorkGuide
     end
 
     desc "list", "List guides"
+    option :all, type: :boolean, default: false, aliases: :a
     def list
       table = Text::Table.new
       table.head = %w(index cycle description done_at)
       table.rows = Guide.all.map.with_index { |guide, index|
-        if guide.should_do?
+        if options[:all] || guide.should_do?
           [index, guide.cycle, guide.description, guide.done_at]
         end
       }.compact
