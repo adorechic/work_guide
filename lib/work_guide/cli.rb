@@ -13,6 +13,15 @@ module WorkGuide
       puts "Created [#{Guide.all.size - 1}]#{guide}"
     end
 
+    desc "update [index]", "Edit a guide"
+    option :priority, default: 'medium', banner: '[high|medium|low]'
+    def update(index)
+      guide = Guide.all[index.to_i]
+      guide.priority = options[:priority] if options[:priority]
+      Guide.save
+      puts "Update [#{index}]#{guide}"
+    end
+
     desc "list", "List guides"
     option :all, type: :boolean, default: false, aliases: :a
     def list
