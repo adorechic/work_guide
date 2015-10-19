@@ -3,7 +3,7 @@ require 'active_support/core_ext'
 
 module WorkGuide
   class Guide
-    attr_accessor :description, :cycle, :done_at
+    attr_accessor :description, :cycle, :done_at, :priority
 
     class << self
       def create(args)
@@ -28,12 +28,18 @@ module WorkGuide
       end
     end
 
-    def initialize(description: , cycle: 'daily', done_at: nil)
+    def initialize(
+          description: ,
+          cycle: 'daily',
+          done_at: nil,
+          priority: 'medium'
+        )
       @description = description
       @cycle = cycle
       if done_at
         @done_at = Time.parse(done_at)
       end
+      @priority = priority
     end
 
     def should_do?
@@ -60,11 +66,12 @@ module WorkGuide
         description: description,
         cycle: cycle,
         done_at: done_at,
+        priority: priority,
       }
     end
 
     def to_s
-      "[#{cycle}] #{description} (#{done_at || '--'})"
+      "[#{cycle}/#{priority}] #{description} (#{done_at || '--'})"
     end
   end
 end

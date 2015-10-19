@@ -17,10 +17,10 @@ module WorkGuide
     option :all, type: :boolean, default: false, aliases: :a
     def list
       table = Text::Table.new
-      table.head = %w(index cycle description done_at)
+      table.head = %w(index cycle priorify description done_at)
       table.rows = Guide.all.map.with_index { |guide, index|
         if options[:all] || guide.should_do?
-          [index, guide.cycle, guide.description, guide.done_at]
+          [index, guide.cycle, guide.priority, guide.description, guide.done_at]
         end
       }.compact
       puts table.to_s
