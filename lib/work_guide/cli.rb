@@ -28,10 +28,14 @@ module WorkGuide
       table = Text::Table.new
       table.head = %w(index cycle priorify description done_at)
       table.rows = Guide.all.map.with_index { |guide, index|
-        if options[:all] || guide.should_do?
-          [index, guide.cycle, guide.priority, guide.description, guide.done_at]
-        end
-      }.compact
+        [index, guide]
+      }.select { |index, guide|
+        options[:all] || guide.should_do?
+      }.sort_by { |index, guide|
+        guide.priority_rate
+      }.map { |index, guide|
+        [index, guide.cycle, guide.priority, guide.description, guide.done_at]
+      }
       puts table.to_s
     end
 

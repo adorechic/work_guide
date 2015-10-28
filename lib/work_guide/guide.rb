@@ -61,6 +61,15 @@ module WorkGuide
       end
     end
 
+    def priority_rate
+      case priority
+      when 'high'  ; 1
+      when 'medium'; 2
+      when 'low'   ; 3
+      else         ; 9
+      end
+    end
+
     def to_h
       {
         description: description,
