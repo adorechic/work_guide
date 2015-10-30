@@ -1,4 +1,5 @@
 require 'json'
+require 'pathname'
 
 module WorkGuide
   class Storage
