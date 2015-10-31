@@ -1,5 +1,5 @@
 require 'thor'
-require 'text-table'
+require 'kosi'
 
 module WorkGuide
   class CLI < Thor
@@ -25,9 +25,11 @@ module WorkGuide
     desc "list", "List guides"
     option :all, type: :boolean, default: false, aliases: :a
     def list
-      table = Text::Table.new
-      table.head = %w(index cycle priorify description done_at)
-      table.rows = Guide.all.map.with_index { |guide, index|
+      table = Kosi::Table.new(
+        header: %w(index cycle priorify description done_at)
+      )
+
+      rows = Guide.all.map.with_index { |guide, index|
         [index, guide]
       }.select { |index, guide|
         options[:all] || guide.should_do?
@@ -36,7 +38,8 @@ module WorkGuide
       }.map { |index, guide|
         [index, guide.cycle, guide.priority, guide.description, guide.done_at]
       }
-      puts table.to_s
+
+      puts table.render(rows)
     end
 
     desc "delete [index]", "Delete a guide"
