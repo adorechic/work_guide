@@ -25,7 +25,7 @@ module WorkGuide
     private
 
     def work_guide_dir
-      Pathname.new(Dir.home).join('work_guide').tap do |dir|
+      Pathname.new(Dir.home).join('.work_guide').tap do |dir|
         dir.mkpath
       end
     end
