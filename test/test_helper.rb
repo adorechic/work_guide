@@ -6,3 +6,4 @@ require 'minitest/reporters'
 Minitest::Reporters.use!
 
 require 'fakefs/safe'
+require 'pry'
