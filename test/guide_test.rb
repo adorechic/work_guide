@@ -32,4 +32,41 @@ class WorkGuide::GuideTest < Minitest::Test
     assert_equal 'foo', guide.description
     assert_equal Time.new(2015, 10, 31), guide.done_at.to_time
   end
+
+  def test_alert_after_terms
+    time = Time.now
+    guide = WorkGuide::Guide.new(description: 'test', cycle: 'hourly', done_at: time.to_s)
+
+    Timecop.freeze(1.hour.since(time).beginning_of_hour + 1) do
+      assert guide.should_do?
+    end
+    Timecop.freeze(1.hour.since(time).beginning_of_hour) do
+      refute guide.should_do?
+    end
+
+    guide.cycle = 'daily'
+    Timecop.freeze(1.day.since(time).beginning_of_day + 1) do
+      assert guide.should_do?
+    end
+    Timecop.freeze(1.day.since(time).beginning_of_day) do
+      refute guide.should_do?
+    end
+
+    guide.cycle = 'weekly'
+    Timecop.freeze(1.week.since(time).beginning_of_day + 1) do
+      assert guide.should_do?
+    end
+    Timecop.freeze(1.week.since(time).beginning_of_day) do
+      refute guide.should_do?
+    end
+
+    guide.cycle = 'monthly'
+    Timecop.freeze(1.month.since(time).beginning_of_month + 1) do
+      assert guide.should_do?
+    end
+    Timecop.freeze(1.month.since(time).beginning_of_month) do
+      refute guide.should_do?
+    end
+
+  end
 end
