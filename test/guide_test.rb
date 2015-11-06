@@ -30,6 +30,6 @@ class WorkGuide::GuideTest < Minitest::Test
     guide = WorkGuide::Guide.all.first
 
     assert_equal 'foo', guide.description
-    assert_equal Time.new(2015, 10, 31), guide.done_at
+    assert_equal Time.new(2015, 10, 31), guide.done_at.to_time
   end
 end
