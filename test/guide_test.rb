@@ -67,6 +67,13 @@ class WorkGuide::GuideTest < Minitest::Test
     Timecop.freeze(1.month.since(time).beginning_of_month) do
       refute guide.should_do?
     end
+  end
 
+  def test_priority_rate
+    high = WorkGuide::Guide.new(description: 'desc', priority: 'high')
+    medium = WorkGuide::Guide.new(description: 'desc', priority: 'medium')
+    low = WorkGuide::Guide.new(description: 'desc', priority: 'low')
+
+    assert_equal [high, medium, low], [high, medium, low].shuffle.sort_by(&:priority_rate)
   end
 end
