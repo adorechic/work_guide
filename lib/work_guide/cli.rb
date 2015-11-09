@@ -51,17 +51,23 @@ module WorkGuide
 
     desc "done [index]", "Mark as done"
     option :at, banner: "done_at"
-    def done(index)
-      guide = Guide.all[index.to_i]
-      guide.done_at =
+    def done(*indexes)
+      guides = indexes.map { |index| Guide.all[index.to_i] }
+      done_at =
         if options[:at]
           Time.parse(options[:at])
         else
           Time.now
         end
 
+      guides.each do |guide|
+        guide.done_at = done_at
+      end
+
       Guide.save
-      puts "Done [#{index}]#{guide}"
+      indexes.each do |index|
+        puts "Done [#{index}]#{Guide.all[index.to_i]}"
+      end
     end
   end
 end
