@@ -41,6 +41,7 @@ module WorkGuide
 
       puts table.render(rows)
     end
+    default_task :list
 
     desc "delete [index]", "Delete a guide"
     def delete(index)
