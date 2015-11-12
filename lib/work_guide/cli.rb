@@ -38,7 +38,21 @@ module WorkGuide
 
     desc "done [index]", "Mark as done"
     option :at, banner: "done_at"
-    def done(*indexes)
+    def done(*args)
+      indexes = args.dup
+      if indexes.empty?
+        IO.popen("peco", "r+") do |io|
+          io.puts guide_table
+          io.close_write
+          index = io.gets.split("|")[1]
+          if index && index =~ /\d/
+            indexes << index.strip
+          else
+            abort "[ERROR] Please select guide index !!"
+          end
+        end
+      end
+
       guides = indexes.map { |index| Guide.all[index.to_i] }
       done_at =
         if options[:at]
