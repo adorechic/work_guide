@@ -25,21 +25,7 @@ module WorkGuide
     desc "list", "List guides"
     option :all, type: :boolean, default: false, aliases: :a
     def list
-      table = Kosi::Table.new(
-        header: %w(index cycle priorify description done_at)
-      )
-
-      rows = Guide.all.map.with_index { |guide, index|
-        [index, guide]
-      }.select { |index, guide|
-        options[:all] || guide.should_do?
-      }.sort_by { |index, guide|
-        guide.priority_rate
-      }.map { |index, guide|
-        [index, guide.cycle, guide.priority, guide.description, guide.done_at]
-      }
-
-      puts table.render(rows)
+      puts guide_table(all: options[:all])
     end
     default_task :list
 
@@ -69,6 +55,25 @@ module WorkGuide
       indexes.each do |index|
         puts "Done [#{index}]#{Guide.all[index.to_i]}"
       end
+    end
+
+    private
+
+    def guide_table(all: false)
+      rows = Guide.all.map.with_index { |guide, index|
+        [index, guide]
+      }.select { |index, guide|
+        all || guide.should_do?
+      }.sort_by { |index, guide|
+        guide.priority_rate
+      }.map { |index, guide|
+        [index, guide.cycle, guide.priority, guide.description, guide.done_at]
+      }
+
+      table = Kosi::Table.new(
+        header: %w(index cycle priorify description done_at)
+      )
+      table.render(rows)
     end
   end
 end
