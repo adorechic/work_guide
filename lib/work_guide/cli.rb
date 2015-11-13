@@ -17,7 +17,8 @@ module WorkGuide
 
     desc "update [index]", "Edit a guide"
     option :priority, default: 'medium', banner: '[high|medium|low]'
-    def update(index)
+    def update(index = nil)
+      index = boot_peco(all: true) unless index.present?
       guide = Guide.all[index.to_i]
       guide.priority = options[:priority] if options[:priority]
       Guide.save
@@ -32,7 +33,8 @@ module WorkGuide
     default_task :list
 
     desc "delete [index]", "Delete a guide"
-    def delete(index)
+    def delete(index = nil)
+      index = boot_peco(all: true) unless index.present?
       guide = Guide.all.delete_at(index.to_i)
       Guide.save
       puts "Deleted [#{index}]#{guide}"
@@ -64,9 +66,9 @@ module WorkGuide
 
     private
 
-    def boot_peco
+    def boot_peco(all: false)
       IO.popen("peco", "r+") do |io|
-        io.puts guide_table
+        io.puts guide_table(all: all)
         io.close_write
         index = io.gets.split("|")[1]
         if index && index =~ /\d/
