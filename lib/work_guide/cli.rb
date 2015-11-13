@@ -42,18 +42,7 @@ module WorkGuide
     option :at, banner: "done_at"
     def done(*args)
       indexes = args.dup
-      if indexes.empty?
-        IO.popen("peco", "r+") do |io|
-          io.puts guide_table
-          io.close_write
-          index = io.gets.split("|")[1]
-          if index && index =~ /\d/
-            indexes << index.strip
-          else
-            abort "[ERROR] Please select guide index !!"
-          end
-        end
-      end
+      indexes << boot_peco if indexes.empty?
 
       guides = indexes.map { |index| Guide.all[index.to_i] }
       done_at =
@@ -74,6 +63,19 @@ module WorkGuide
     end
 
     private
+
+    def boot_peco
+      IO.popen("peco", "r+") do |io|
+        io.puts guide_table
+        io.close_write
+        index = io.gets.split("|")[1]
+        if index && index =~ /\d/
+          index.strip
+        else
+          abort "[ERROR] Please select guide index !!"
+        end
+      end
+    end
 
     def guide_table(all: false)
       rows = Guide.all.map.with_index { |guide, index|
