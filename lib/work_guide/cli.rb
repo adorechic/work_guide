@@ -5,9 +5,11 @@ module WorkGuide
   class CLI < Thor
     desc "add [guide description]", "Add a new guide"
     option :cycle, default: 'daily', banner: '[hourly|daily|weekly|monthly]', aliases: :c
+    option :priority, default: 'medium', banner: '[high|medium|low]'
     def add(description)
       guide = Guide.create(
         description: description,
+        priority: options[:priority],
         cycle: options[:cycle]
       )
       puts "Created [#{Guide.all.size - 1}]#{guide}"
