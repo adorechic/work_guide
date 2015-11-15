@@ -6,11 +6,13 @@ module WorkGuide
     desc "add [guide description]", "Add a new guide"
     option :cycle, default: 'daily', banner: '[hourly|daily|weekly|monthly]', aliases: :c
     option :priority, default: 'medium', banner: '[high|medium|low]'
+    option :week_start, default: 'monday', banner: '[sunday|monday|...]'
     def add(description)
       guide = Guide.create(
         description: description,
         priority: options[:priority],
-        cycle: options[:cycle]
+        cycle: options[:cycle],
+        week_start: options[:week_start]
       )
       puts "Created [#{Guide.all.size - 1}]#{guide}"
     end
@@ -87,11 +89,11 @@ module WorkGuide
       }.sort_by { |index, guide|
         guide.priority_rate
       }.map { |index, guide|
-        [index, guide.cycle, guide.priority, guide.description, guide.done_at]
+        [index, guide.cycle, guide.priority, guide.description, guide.done_at, guide.week_start_if_weekly]
       }
 
       table = Kosi::Table.new(
-        header: %w(index cycle priorify description done_at)
+        header: %w(index cycle priorify description done_at week_start)
       )
       table.render(rows)
     end

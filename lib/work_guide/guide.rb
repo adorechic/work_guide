@@ -3,7 +3,7 @@ require 'active_support/core_ext'
 
 module WorkGuide
   class Guide
-    attr_accessor :description, :cycle, :done_at, :priority
+    attr_accessor :description, :cycle, :done_at, :priority, :week_start
 
     class << self
       def create(args)
@@ -32,7 +32,8 @@ module WorkGuide
           description: ,
           cycle: 'daily',
           done_at: nil,
-          priority: 'medium'
+          priority: 'medium',
+          week_start: 'monday'
         )
       @description = description
       @cycle = cycle
@@ -40,6 +41,10 @@ module WorkGuide
         @done_at = Time.parse(done_at)
       end
       @priority = priority
+
+      if week_start
+        @week_start = week_start.to_sym
+      end
     end
 
     def should_do?
@@ -50,7 +55,7 @@ module WorkGuide
         when 'daily'
           1.day.since(done_at).beginning_of_day.past?
         when 'weekly'
-          1.week.since(done_at).beginning_of_day.past?
+          Time.now.beginning_of_week(week_start) >= done_at
         when 'monthly'
           1.month.since(done_at).beginning_of_month.past?
         else
@@ -59,6 +64,10 @@ module WorkGuide
       else
         true
       end
+    end
+
+    def week_start_if_weekly
+      cycle == 'weekly' ? week_start : nil
     end
 
     def priority_rate
@@ -76,6 +85,7 @@ module WorkGuide
         cycle: cycle,
         done_at: done_at,
         priority: priority,
+        week_start: week_start,
       }
     end
 

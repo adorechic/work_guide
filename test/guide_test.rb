@@ -53,10 +53,10 @@ class WorkGuide::GuideTest < Minitest::Test
     end
 
     guide.cycle = 'weekly'
-    Timecop.freeze(1.week.since(time).beginning_of_day + 1) do
+    Timecop.freeze(1.week.since(time).beginning_of_week) do
       assert guide.should_do?
     end
-    Timecop.freeze(1.week.since(time).beginning_of_day) do
+    Timecop.freeze(1.week.since(time).beginning_of_week - 1) do
       refute guide.should_do?
     end
 
