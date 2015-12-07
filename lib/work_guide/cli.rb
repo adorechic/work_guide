@@ -18,11 +18,15 @@ module WorkGuide
     end
 
     desc "update [index]", "Edit a guide"
-    option :priority, default: 'medium', banner: '[high|medium|low]'
+    option :priority, default: nil, banner: '[high|medium|low]'
+    option :cycle, default: nil, banner: '[hourly|daily|weekly|monthly]', aliases: :c
+    option :week_start, default: nil, banner: '[sunday|monday|...]'
     def update(index = nil)
       index = boot_peco(all: true) unless index.present?
       guide = Guide.all[index.to_i]
       guide.priority = options[:priority] if options[:priority]
+      guide.cycle = options[:cycle] if options[:cycle]
+      guide.week_start = options[:week_start] if options[:week_start]
       Guide.save
       puts "Update [#{index}]#{guide}"
     end
